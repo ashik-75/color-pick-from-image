@@ -69,7 +69,7 @@ const Page = () => {
         )}
       </div>
 
-      {/* calculation part */}
+      {/* calculation part ipp*/}
       {image && (
         <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
           <div>
