@@ -2,7 +2,7 @@ import { Menu } from "lucide-react";
 import React from "react";
 import MobileSidebar from "./mobile-sidebar";
 import Logo from "./logo";
-import { UserButton } from "@clerk/nextjs";
+
 import NavbarRoutes from "@/components/navbar-routes";
 
 const Navbar = () => {
@@ -16,7 +16,6 @@ const Navbar = () => {
 
       <div className="flex items-center gap-x-5">
         <NavbarRoutes />
-        <UserButton afterSignOutUrl="/" />
       </div>
     </div>
   );
