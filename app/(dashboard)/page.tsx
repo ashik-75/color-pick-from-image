@@ -32,13 +32,13 @@ const Page = () => {
 
   const handleImage = (url: string) => setImage(url);
 
-  const R1 = Math.round((color1.r / 255) * 100);
-  const Y1 = Math.round((color1.y / 255) * 100);
-  const B1 = Math.round((color1.b / 255) * 100);
+  const R1 = Math.ceil((color1.r / 255) * 100);
+  const Y1 = Math.ceil((color1.y / 255) * 100);
+  const B1 = Math.ceil((color1.b / 255) * 100);
 
-  const R2 = Math.round((color2.r / 255) * 100);
-  const Y2 = Math.round((color2.y / 255) * 100);
-  const B2 = Math.round((color2.b / 255) * 100);
+  const R2 = Math.ceil((color2.r / 255) * 100);
+  const Y2 = Math.ceil((color2.y / 255) * 100);
+  const B2 = Math.ceil((color2.b / 255) * 100);
 
   const finalRYB = () => {
     const r = Math.abs(color1.r - color2.r);
@@ -258,13 +258,13 @@ const Page = () => {
 
                 <div>
                   <div>
-                    R: <span>{Math.round((finalRYB().r / 255) * 100)}%</span>
+                    R: <span>{Math.abs(R1 - R2)}%</span>
                   </div>
                   <div>
-                    Y: <span>{Math.round((finalRYB().y / 255) * 100)}%</span>
+                    Y: <span>{Math.abs(Y1 - Y2)}%</span>
                   </div>
                   <div>
-                    B: <span>{Math.round((finalRYB().b / 255) * 100)}%</span>
+                    B: <span>{Math.abs(B1 - B2)}%</span>
                   </div>
                 </div>
 
