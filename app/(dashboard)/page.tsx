@@ -18,6 +18,7 @@ const Page = () => {
   const [selected, setSelected] = useState(1);
   const [color1, setColor1] = useState({ r: 0, y: 0, b: 0 });
   const [color2, setColor2] = useState({ r: 0, y: 0, b: 0 });
+  const [final, setFinal] = useState({ r: 0, y: 0, b: 0 });
 
   const handleColorPick = (color: string) => {
     if (selected === 1) {
@@ -43,6 +44,7 @@ const Page = () => {
     const r = Math.abs(color1.r - color2.r);
     const y = Math.abs(color1.y - color2.y);
     const b = Math.abs(color1.b - color2.b);
+
     return {
       r,
       y,
@@ -236,10 +238,12 @@ const Page = () => {
                 padding: "20px",
                 background: `${RYBTORGB(finalRYB())}`,
               }}
-              className={cn("w-full cursor-pointer rounded-md border")}
+              className={cn("hidden w-full cursor-pointer rounded-md border")}
             >
               Needed
             </div>
+
+            <div className="py-[35px]"></div>
 
             {color1 && (
               <div className="space-y-2">
@@ -249,6 +253,18 @@ const Page = () => {
                 <div className="">
                   <div className="flex gap-2">
                     RYB: <pre></pre> {JSON.stringify(finalRYB())}
+                  </div>
+                </div>
+
+                <div>
+                  <div>
+                    R: <span>{Math.round((finalRYB().r / 255) * 100)}%</span>
+                  </div>
+                  <div>
+                    Y: <span>{Math.round((finalRYB().y / 255) * 100)}%</span>
+                  </div>
+                  <div>
+                    B: <span>{Math.round((finalRYB().b / 255) * 100)}%</span>
                   </div>
                 </div>
 
