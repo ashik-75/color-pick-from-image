@@ -102,7 +102,7 @@ const Page = () => {
                       <span>R</span>{" "}
                       <div className="flex-1">
                         <Slider
-                          defaultValue={[R1]}
+                          value={[R1]}
                           onValueChange={(v) =>
                             setColor1((prev) => ({
                               ...prev,
@@ -117,7 +117,7 @@ const Page = () => {
                       <span>Y</span>{" "}
                       <div className="flex-1">
                         <Slider
-                          defaultValue={[Y1]}
+                          value={[Y1]}
                           onValueChange={(v) =>
                             setColor1((prev) => ({
                               ...prev,
@@ -132,7 +132,7 @@ const Page = () => {
                       <span>B</span>{" "}
                       <div className="flex-1">
                         <Slider
-                          defaultValue={[B1]}
+                          value={[B1]}
                           onValueChange={(v) =>
                             setColor1((prev) => ({
                               ...prev,
@@ -181,7 +181,7 @@ const Page = () => {
                       <span>R</span>{" "}
                       <div className="flex-1">
                         <Slider
-                          defaultValue={[R2]}
+                          value={[R2]}
                           onValueChange={(v) =>
                             setColor2((prev) => ({
                               ...prev,
@@ -196,7 +196,7 @@ const Page = () => {
                       <span>Y</span>{" "}
                       <div className="flex-1">
                         <Slider
-                          defaultValue={[Y2]}
+                          value={[Y2]}
                           onValueChange={(v) =>
                             setColor2((prev) => ({
                               ...prev,
@@ -211,7 +211,7 @@ const Page = () => {
                       <span>B</span>{" "}
                       <div className="flex-1">
                         <Slider
-                          defaultValue={[B2]}
+                          value={[B2]}
                           onValueChange={(v) =>
                             setColor2((prev) => ({
                               ...prev,
