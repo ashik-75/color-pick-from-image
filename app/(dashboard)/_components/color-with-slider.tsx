@@ -34,7 +34,7 @@ function ColorWithSlider({
       </div>
       <div className="flex rounded-xl border p-2">
         <input
-          value={value}
+          value={value ? value : ""}
           max={100}
           min={0}
           className="w-10 border-none outline-none"
