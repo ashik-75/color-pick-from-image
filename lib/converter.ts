@@ -145,3 +145,43 @@ export const RGBTORYB = (value: string) => {
 export const RYBTORGB = ({ r, y, b }: { r: number; y: number; b: number }) => {
   return objToRgb(ryb2rgb(r, y, b));
 };
+export function rgbToCmyk(value: string) {
+  const output = rgbToObj(value);
+  if (output) {
+    const { r, g, b } = output;
+
+    // Normalize RGB values
+    const normalizedR = r / 255;
+    const normalizedG = g / 255;
+    const normalizedB = b / 255;
+
+    // Calculate CMY values
+    const k = 1 - Math.max(normalizedR, normalizedG, normalizedB);
+    const c = (1 - normalizedR - k) / (1 - k);
+    const m = (1 - normalizedG - k) / (1 - k);
+    const y = (1 - normalizedB - k) / (1 - k);
+
+    // Adjust values to percentage
+    const cPercent = Math.round(c * 100);
+    const mPercent = Math.round(m * 100);
+    const yPercent = Math.round(y * 100);
+    const kPercent = Math.round(k * 100);
+
+    return { c: cPercent, m: mPercent, y: yPercent, k: kPercent };
+  }
+
+  return { c: 0, m: 0, y: 0, k: 0 };
+}
+
+export function cmykToRgb(c: number, m: number, y: number, k: number) {
+  const normalizedC = c / 100;
+  const normalizedM = m / 100;
+  const normalizedY = y / 100;
+  const normalizedK = k / 100;
+
+  const r = Math.round(255 * (1 - normalizedC) * (1 - normalizedK));
+  const g = Math.round(255 * (1 - normalizedM) * (1 - normalizedK));
+  const b = Math.round(255 * (1 - normalizedY) * (1 - normalizedK));
+
+  return { r, g, b };
+}

@@ -2,55 +2,57 @@
 import { ImageColorPicker } from "react-image-color-picker";
 import { Copy } from "lucide-react";
 import React, { useState } from "react";
-import ImageUploadForm from "./_components/image-upload";
-import { RGBTORYB, RYBTORGB } from "@/lib/converter";
+import { cmykToRgb, objToRgb, rgbToCmyk } from "@/lib/converter";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import toast from "react-hot-toast";
-import ColorWithSlider from "./_components/color-with-slider";
+import ImageUploadForm from "../_components/image-upload";
+import CmykColorWithSlider from "../_components/cmyk-color-with-slider copy";
 
 const Page = () => {
   const [image, setImage] = useState("");
   const [selected, setSelected] = useState(1);
-  const [color1, setColor1] = useState({ r: 0, y: 0, b: 0 });
-  const [color2, setColor2] = useState({ r: 0, y: 0, b: 0 });
-  const [final, setFinal] = useState({ r: 0, y: 0, b: 0 });
+  const [color1, setColor1] = useState({ c: 0, m: 0, y: 0, k: 0 });
+  const [color2, setColor2] = useState({ c: 0, m: 0, y: 0, k: 0 });
+  const [final, setFinal] = useState({ c: 0, m: 0, y: 0, k: 0 });
 
   const handleColorPick = (color: string) => {
     if (selected === 1) {
-      setColor1(RGBTORYB(color));
+      setColor1(rgbToCmyk(color));
     }
 
     if (selected === 2) {
-      setColor2(RGBTORYB(color));
+      setColor2(rgbToCmyk(color));
     }
   };
 
   const handleImage = (url: string) => setImage(url);
 
-  const R1 = Math.ceil((color1.r / 255) * 100);
-  const Y1 = Math.ceil((color1.y / 255) * 100);
-  const B1 = Math.ceil((color1.b / 255) * 100);
-
-  const R2 = Math.ceil((color2.r / 255) * 100);
-  const Y2 = Math.ceil((color2.y / 255) * 100);
-  const B2 = Math.ceil((color2.b / 255) * 100);
-
-  const finalRYB = () => {
-    const r = Math.abs(color1.r - color2.r);
+  const finaCMYK = () => {
+    const c = Math.abs(color1.c - color2.c);
+    const m = Math.abs(color1.m - color2.m);
     const y = Math.abs(color1.y - color2.y);
-    const b = Math.abs(color1.b - color2.b);
+    const k = Math.abs(color1.k - color2.k);
 
     return {
-      r,
+      c,
+      m,
       y,
-      b,
+      k,
     };
   };
 
   const handleCopyColor = async () => {
-    await navigator.clipboard.writeText(JSON.stringify(finalRYB()));
-    toast.success("RYB color copied");
+    await navigator.clipboard.writeText(JSON.stringify(finaCMYK()));
+    toast.success("CMYK color copied");
+  };
+
+  const targetBg = () => {
+    return objToRgb(cmykToRgb(color1.c, color1.m, color1.y, color1.k));
+  };
+
+  const currentBg = () => {
+    return objToRgb(cmykToRgb(color2.c, color2.m, color2.y, color2.k));
   };
   return (
     <div className=" mx-auto h-full max-w-5xl space-y-5 ">
@@ -67,6 +69,7 @@ const Page = () => {
         )}
       </div>
 
+      {/* calculation part ipp*/}
       {image && (
         <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
           {/* Target div */}
@@ -75,7 +78,7 @@ const Page = () => {
               onClick={() => setSelected(1)}
               style={{
                 padding: "20px",
-                background: `${RYBTORGB(color1)}`,
+                background: `${targetBg()}`,
               }}
               className={cn(
                 "w-full cursor-pointer rounded-md border",
@@ -87,26 +90,29 @@ const Page = () => {
 
             <div>
               <div className="flex gap-5">
-                RGB: <div>{RYBTORGB(color1)}</div>
+                RGB: <div>{targetBg()}</div>
               </div>
-              <div className="flex gap-2">
-                RYB: <pre></pre> {JSON.stringify(color1)}
-              </div>
+              <div className="flex gap-2">CMYK: {JSON.stringify(color1)}</div>
 
               <div className="space-y-4">
-                <ColorWithSlider
-                  field="r"
-                  value={R1}
+                <CmykColorWithSlider
+                  field="c"
+                  value={color1.c}
                   setColorValue={setColor1}
                 />
-                <ColorWithSlider
+                <CmykColorWithSlider
+                  field="m"
+                  value={color1.m}
+                  setColorValue={setColor1}
+                />
+                <CmykColorWithSlider
                   field="y"
-                  value={Y1}
+                  value={color1.y}
                   setColorValue={setColor1}
                 />
-                <ColorWithSlider
-                  field="b"
-                  value={B1}
+                <CmykColorWithSlider
+                  field="k"
+                  value={color1.k}
                   setColorValue={setColor1}
                 />
               </div>
@@ -119,7 +125,7 @@ const Page = () => {
               onClick={() => setSelected(2)}
               style={{
                 padding: "20px",
-                background: `${RYBTORGB(color2)}`,
+                background: `${currentBg()}`,
               }}
               className={cn(
                 "w-full cursor-pointer rounded-md border",
@@ -131,78 +137,86 @@ const Page = () => {
 
             <div>
               <div className="flex gap-5">
-                RGB: <div>{RYBTORGB(color2)}</div>
+                RGB: <div>{JSON.stringify(currentBg())}</div>
               </div>
               <div className="flex gap-2">
-                RYB: <pre></pre> {JSON.stringify(color2)}
+                CMYK: <pre></pre> {JSON.stringify(color2)}
               </div>
 
               <div className="space-y-4">
-                <ColorWithSlider
-                  field="r"
-                  value={R2}
+                <CmykColorWithSlider
+                  field="c"
+                  value={color2.c}
                   setColorValue={setColor2}
                 />
-                <ColorWithSlider
+                <CmykColorWithSlider
+                  field="m"
+                  value={color2.m}
+                  setColorValue={setColor2}
+                />
+                <CmykColorWithSlider
                   field="y"
-                  value={Y2}
+                  value={color2.y}
                   setColorValue={setColor2}
                 />
-                <ColorWithSlider
-                  field="b"
-                  value={B2}
+                <CmykColorWithSlider
+                  field="k"
+                  value={color2.k}
                   setColorValue={setColor2}
                 />
               </div>
             </div>
           </div>
 
-          {/* 3rd */}
+          {/* 3rd output */}
           <div>
             <div
               style={{
                 padding: "20px",
-                background: `${RYBTORGB(finalRYB())}`,
               }}
               className={cn("hidden w-full cursor-pointer rounded-md border")}
             >
               Needed
             </div>
 
-            <div className="py-[35px]"></div>
-
-            {color1 && (
-              <div className="space-y-2">
-                <div className="flex gap-5">
-                  RGB: <div>{RYBTORGB(finalRYB())}</div>
-                </div>
-                <div className="">
-                  <div className="flex gap-2">
-                    RYB: <pre></pre> {JSON.stringify(finalRYB())}
-                  </div>
-                </div>
-
+            <div className="space-y-2">
+              <div className="flex gap-5">
+                RGB:{" "}
                 <div>
-                  <div>
-                    R: <span>{Math.abs(R1 - R2)}%</span>
-                  </div>
-                  <div>
-                    Y: <span>{Math.abs(Y1 - Y2)}%</span>
-                  </div>
-                  <div>
-                    B: <span>{Math.abs(B1 - B2)}%</span>
-                  </div>
+                  {JSON.stringify(
+                    cmykToRgb(color2.c, color2.m, color2.y, color2.k),
+                  )}
                 </div>
-
-                <Button
-                  size={"sm"}
-                  variant={"secondary"}
-                  onClick={handleCopyColor}
-                >
-                  <Copy size={16} />
-                </Button>
               </div>
-            )}
+              <div className="">
+                <div className="flex gap-2">
+                  CMYK: <pre></pre> {JSON.stringify(finaCMYK())}
+                </div>
+              </div>
+
+              <div>
+                <div>
+                  C: <span>{finaCMYK().c}%</span>
+                </div>
+                <div>
+                  M: <span>{finaCMYK().m}%</span>
+                </div>
+                <div>
+                  Y: <span>{finaCMYK().y}%</span>
+                </div>
+                <div>
+                  K: <span>{finaCMYK().k}%</span>
+                </div>
+              </div>
+
+              <Button
+                size={"sm"}
+                variant={"secondary"}
+                onClick={handleCopyColor}
+              >
+                <Copy size={16} />
+              </Button>
+            </div>
           </div>
         </div>
       )}

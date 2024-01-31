@@ -1,4 +1,5 @@
 import "@/styles/globals.css";
+import Navigation from "./_components/navigation";
 
 export const metadata = {
   title: "Dashboard",
@@ -9,6 +10,7 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
   return (
     <div>
       <div>
+        <Navigation />
         <main className="h-full  p-10">{children}</main>
       </div>
     </div>
